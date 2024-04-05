@@ -55,3 +55,6 @@ df = pd.DataFrame(all_models_scores)
 
 # Streamlit에 테이블 형식으로 데이터 표시
 st.table(df)
+
+# TODO: CML에서 작동하도록 설정하기
+# https://github.com/cloudera/CML_AMP_Streamlit_on_CML/blob/master/cml/launch_app.py
