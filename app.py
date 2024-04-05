@@ -5,7 +5,7 @@ import os
 import json
 
 # Streamlit 앱의 타이틀 설정
-st.title('모델별 성능 비교')
+st.title('Bench Result')
 
 # 폴더 경로 설정 (모델별 JSON 파일이 있는 폴더를 가정합니다. 실제 경로에 맞게 수정하세요.)
 folder_path = 'test_result'
@@ -21,6 +21,9 @@ for file in files:
     query_single_scores = []
     query_multi_scores = []
     file_path = os.path.join(folder_path, file)
+    # 모델명 추출 (파일명에서 확장자 제거)
+    model_name = os.path.splitext(file)[0][6:]
+    model = {"모델명": model_name}
     with jsonlines.open(file_path) as f:  # 인코딩을 utf-8로 명시
         for line in f:
              # JSON 객체로 변환
@@ -38,16 +41,14 @@ for file in files:
         category_average_scores = {cat: sum(scores)/len(scores) for cat, scores in category_scores.items()}
         average_query_single = sum(query_single_scores) / len(query_single_scores)
         average_query_multi = sum(query_multi_scores) / len(query_multi_scores)
-        
-    # 모델명 추출 (파일명에서 확장자 제거)
-    model_name = os.path.splitext(file)[0][6:]
-    print(model_name)
+        average_total = (average_query_single + average_query_multi)/2
+
 #     # 모델명을 데이터에 추가
-    category_average_scores["모델명"] = model_name
     category_average_scores["싱글턴"] = average_query_single
     category_average_scores["멀티턴"] = average_query_multi
-
-    all_models_scores.append(category_average_scores)
+    category_average_scores["총합"] = average_total
+    model.update(category_average_scores)
+    all_models_scores.append(model)
 
 # 데이터프레임 생성
 df = pd.DataFrame(all_models_scores)
