@@ -1,14 +1,14 @@
-import jsonlines
 import streamlit as st
+import jsonlines
 import pandas as pd
 import os
 import json
 
 # Streamlit 앱의 타이틀 설정
-st.title('Bench Result')
+st.title('MT-Bench(GPT-4 as a Judge)')
 
 # 폴더 경로 설정 (모델별 JSON 파일이 있는 폴더를 가정합니다. 실제 경로에 맞게 수정하세요.)
-folder_path = 'test_result'
+folder_path = 'MT-Bench(GPT-4)_result'
 
 # 해당 폴더 내의 모든 JSON 파일을 리스트업
 files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
@@ -53,8 +53,8 @@ for file in files:
 # 데이터프레임 생성
 df = pd.DataFrame(all_models_scores)
 
-# Streamlit에 테이블 형식으로 데이터 표시
-st.table(df)
+# Streamlit에 데이터프레임 형식으로 데이터 표시
+st.dataframe(df, height = len(files)*37)
 
 # TODO: CML에서 작동하도록 설정하기
 # https://github.com/cloudera/CML_AMP_Streamlit_on_CML/blob/master/cml/launch_app.py
