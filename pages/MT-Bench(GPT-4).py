@@ -50,9 +50,10 @@ for file in files:
     model.update(category_average_scores)
     all_models_scores.append(model)
 
-# 데이터프레임 생성
+# 데이터프레임 생성(초기: 총합을 기준으로 정렬 진행)
 df = pd.DataFrame(all_models_scores)
-
+df = df.sort_values('총합', ascending=False)
+df = df.reset_index(drop=True)
 # Streamlit에 데이터프레임 형식으로 데이터 표시
 st.dataframe(df, height = len(files)*37)
 
